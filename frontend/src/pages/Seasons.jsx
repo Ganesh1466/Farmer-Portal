@@ -17,7 +17,8 @@ const Seasons = () => {
         setResultCrops([]);
 
         try {
-            const response = await fetch('http://localhost:5001/api/seasons', {
+            const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+            const response = await fetch(`${API}/api/seasons`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -3,7 +3,7 @@ import { supabase } from '../supabaseClient'; // ✅ adjust path if needed
 
 const API_URL = import.meta.env.VITE_API_URL
     ? `${import.meta.env.VITE_API_URL}/api/chat`
-    : 'http://localhost:5001/api/chat';
+    : `${import.meta.env.VITE_API_URL || 'http://localhost:5001'}/api/chat`;
 
 export const sendMessage = async (messages) => {
     try {

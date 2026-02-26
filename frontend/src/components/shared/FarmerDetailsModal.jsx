@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../supabaseClient';
 import { X, User, Phone, MapPin, Mail, Loader, Star, Download, CheckCircle, Package } from 'lucide-react';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+
 const FarmerDetailsModal = ({ isOpen, onClose, notification }) => {
     const [contract, setContract] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -35,7 +37,7 @@ const FarmerDetailsModal = ({ isOpen, onClose, notification }) => {
     const fetchContractDetails = async () => {
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:5001/api/contracts/${notification.contract_id}`);
+            const response = await fetch(`${API}/api/contracts/${notification.contract_id}`);
 
             if (!response.ok) {
                 const errorData = await response.json();
@@ -58,7 +60,7 @@ const FarmerDetailsModal = ({ isOpen, onClose, notification }) => {
 
         try {
             setDownloadLoading(true);
-            const response = await fetch('http://localhost:5001/api/contracts/generate', {
+            const response = await fetch(`${API}/api/contracts/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -92,7 +94,7 @@ const FarmerDetailsModal = ({ isOpen, onClose, notification }) => {
 
         try {
             setDeliveryLoading(true);
-            const response = await fetch(`http://localhost:5001/api/contracts/${contract.id}/delivery`, {
+            const response = await fetch(`${API}/api/contracts/${contract.id}/delivery`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ deliveryStatus: 'delivered' })
@@ -115,7 +117,7 @@ const FarmerDetailsModal = ({ isOpen, onClose, notification }) => {
 
         try {
             setNotArrivedLoading(true);
-            const response = await fetch(`http://localhost:5001/api/contracts/${contract.id}/delivery`, {
+            const response = await fetch(`${API}/api/contracts/${contract.id}/delivery`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ deliveryStatus: 'not_arrived' })
@@ -142,7 +144,7 @@ const FarmerDetailsModal = ({ isOpen, onClose, notification }) => {
 
         try {
             setRatingLoading(true);
-            const response = await fetch('http://localhost:5001/api/ratings', {
+            const response = await fetch(`${API}/api/ratings`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

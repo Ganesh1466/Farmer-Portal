@@ -9,7 +9,9 @@ import { supabase } from '../../supabaseClient';
 
 import logo from '../../assets/logos/logo.png';
 
-const socket = io('http://localhost:5001');
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || API;
+const socket = io(SOCKET_URL);
 
 const Navbar = () => {
     const { user, logout } = useAuth();

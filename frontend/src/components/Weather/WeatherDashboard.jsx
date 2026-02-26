@@ -4,7 +4,9 @@ import { stateDistricts } from '../../utils/stateDistricts';
 import { fetchWeather as fetchWeatherApi } from '../../Api/api';
 import io from 'socket.io-client';
 // Connect to backend socket
-const socket = io(import.meta.env.VITE_API_URL || 'http://localhost:5001'); // Ensure this matches backend URL
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || API;
+const socket = io(SOCKET_URL);
 
 const WeatherDashboard = () => {
     const [weather, setWeather] = useState(null);

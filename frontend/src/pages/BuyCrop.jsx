@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { ShoppingCart, Search, Filter, Package, IndianRupee, MapPin, Calendar, User, Heart, Info, CheckCircle, AlertCircle } from 'lucide-react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:5001'); // Connect to backend
+const socket = io('https://farmer-portal.onrender.com'); // Connect to backend
 
 const BuyCrop = () => {
     const { user, checkProfileCompletion } = useAuth();

@@ -4,7 +4,9 @@ import { useAuth } from '../../context/AuthContext';
 import io from 'socket.io-client';
 import { X, User, Phone, MapPin, Mail, Loader, MessageCircle, FileText, ChevronLeft, CheckCircle } from 'lucide-react';
 
-const socket = io('http://localhost:5001');
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || API;
+const socket = io(SOCKET_URL);
 
 const BuyerDetailsModal = ({ isOpen, onClose, buyerId, notificationData }) => {
     const { user } = useAuth();
@@ -60,7 +62,7 @@ const BuyerDetailsModal = ({ isOpen, onClose, buyerId, notificationData }) => {
         try {
             setContractLoading(true);
             // Replace with your actual backend URL from env if possible
-            const response = await fetch('http://localhost:5001/api/contracts/generate', {
+            const response = await fetch(`${API}/api/contracts/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -108,7 +110,7 @@ const BuyerDetailsModal = ({ isOpen, onClose, buyerId, notificationData }) => {
             const farmerName = farmerProfile?.name || user.name || 'Farmer';
 
             // Call backend API to accept deal and create contract
-            const response = await fetch('http://localhost:5001/api/contracts/accept', {
+            const response = await fetch(`${API}/api/contracts/accept`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

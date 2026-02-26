@@ -10,7 +10,8 @@ const CropDetail = () => {
     useEffect(() => {
         const fetchCrop = async () => {
             try {
-                const response = await fetch(`http://localhost:5001/api/crops/${id}`);
+                const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+                const response = await fetch(`${API}/api/crops/${id}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch crop details');
                 }

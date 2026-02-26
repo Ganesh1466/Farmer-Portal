@@ -130,7 +130,8 @@ const Profile = () => {
     const fetchReviews = async () => {
         try {
             const userId = user.uuid || user.id;
-            const response = await fetch(`http://localhost:5001/api/ratings/farmer/${userId}/details`);
+            const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+            const response = await fetch(`${API}/api/ratings/farmer/${userId}/details`);
             if (response.ok) {
                 const data = await response.json();
                 setReviews(data.ratings || []);
@@ -184,7 +185,8 @@ const Profile = () => {
 
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:5001/api/auth/delete', {
+            const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+            const response = await fetch(`${API}/api/auth/delete`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'

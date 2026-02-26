@@ -9,8 +9,8 @@ const CropList = () => {
     useEffect(() => {
         const fetchCrops = async () => {
             try {
-                // Assuming backend is running and proxy is not set up or configured to point there
-                const response = await fetch('http://localhost:5001/api/crops');
+                const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+                const response = await fetch(`${API}/api/crops`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch crops');
                 }
