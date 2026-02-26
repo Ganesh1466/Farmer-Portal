@@ -35,7 +35,7 @@ const CropDetail = () => {
     // Helper for image path
     const getCropImage = (cropName) => {
         const safeName = cropName.split(' ')[0].toLowerCase().replace(/[^a-z0-9]/g, '');
-        return `/src/assets/images/crops/${safeName}.png`;
+        return `/images/crops/${safeName}.png`;
     };
 
     return (
