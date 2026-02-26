@@ -1,4 +1,4 @@
-import WeatherDashboard from '../components/weather/WeatherDashboard';
+import WeatherDashboard from '../components/Weather/WeatherDashboard';
 
 const Weather = () => {
     return (

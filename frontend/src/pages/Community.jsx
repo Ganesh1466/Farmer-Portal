@@ -1,5 +1,5 @@
-import QuestionList from '../components/community/QuestionList';
-import AskQuestion from '../components/community/AskQuestion';
+import QuestionList from '../components/Community/QuestionList';
+import AskQuestion from '../components/Community/AskQuestion';
 
 const Community = () => {
     return (

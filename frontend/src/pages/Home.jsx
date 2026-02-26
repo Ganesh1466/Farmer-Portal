@@ -1,6 +1,6 @@
-import HeroSection from '../components/home/HeroSection';
-import HomeInfoCards from '../components/home/HomeInfoCards';
-import HomePhilosophy from '../components/home/HomePhilosophy';
+import HeroSection from '../components/Home/HeroSection';
+import HomeInfoCards from '../components/Home/HomeInfoCards';
+import HomePhilosophy from '../components/Home/HomePhilosophy';
 
 const Home = () => {
     return (

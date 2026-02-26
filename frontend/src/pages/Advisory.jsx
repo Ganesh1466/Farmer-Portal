@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import AdvisoryForm from '../components/advisory/AdvisoryForm';
-import AdvisoryResults from '../components/advisory/AdvisoryResults';
+import AdvisoryForm from '../components/Advisory/AdvisoryForm';
+import AdvisoryResults from '../components/Advisory/AdvisoryResults';
 import { getRecommendedCrops, saveFarmerInput } from '../services/advisoryService';
 import { FaTractor } from 'react-icons/fa';
 
