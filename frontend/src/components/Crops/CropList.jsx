@@ -9,8 +9,8 @@ const CropList = () => {
     useEffect(() => {
         const fetchCrops = async () => {
             try {
-                const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-                const response = await fetch(`${API}/api/crops`);
+                const API = import.meta.env.VITE_API_URL || 'https://farmer-portal.onrender.com';
+                const response = await fetch(`${API}/api/crops`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error('Failed to fetch crops');
                 }

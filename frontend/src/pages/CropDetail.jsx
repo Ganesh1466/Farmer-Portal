@@ -10,8 +10,8 @@ const CropDetail = () => {
     useEffect(() => {
         const fetchCrop = async () => {
             try {
-                const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-                const response = await fetch(`${API}/api/crops/${id}`);
+                const API = import.meta.env.VITE_API_URL || 'https://farmer-portal.onrender.com';
+                const response = await fetch(`${API}/api/crops/${id}`, { credentials: 'include' });
                 if (!response.ok) {
                     throw new Error('Failed to fetch crop details');
                 }

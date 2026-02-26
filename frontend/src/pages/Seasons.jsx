@@ -17,12 +17,13 @@ const Seasons = () => {
         setResultCrops([]);
 
         try {
-            const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+            const API = import.meta.env.VITE_API_URL || 'https://farmer-portal.onrender.com';
             const response = await fetch(`${API}/api/seasons`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
+                credentials: 'include',
                 body: JSON.stringify({ season: inputSeason }),
             });
 

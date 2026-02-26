@@ -5,6 +5,9 @@ import App from './App';
 import './index.css';
 import { AuthProvider } from './context/AuthContext';
 import { FarmerProvider } from './context/FarmerContext';
+import axios from 'axios';
+
+axios.defaults.withCredentials = true;
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

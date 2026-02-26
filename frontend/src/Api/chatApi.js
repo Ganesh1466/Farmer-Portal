@@ -25,6 +25,7 @@ export const sendMessage = async (messages) => {
                     'Authorization': `Bearer ${token}`,
                 },
                 timeout: 30000, // ✅ 30s timeout to avoid hanging requests
+                withCredentials: true,
             }
         );
 

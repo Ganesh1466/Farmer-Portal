@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import io from 'socket.io-client';
 import { X, User, Phone, MapPin, Mail, Loader, MessageCircle, FileText, ChevronLeft, CheckCircle } from 'lucide-react';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
+const API = import.meta.env.VITE_API_URL || 'https://farmer-portal.onrender.com';
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || API;
 const socket = io(SOCKET_URL);
 
@@ -65,6 +65,7 @@ const BuyerDetailsModal = ({ isOpen, onClose, buyerId, notificationData }) => {
             const response = await fetch(`${API}/api/contracts/generate`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({
                     listingId: notificationData?.listing_id,
                     buyerId: buyerId,
@@ -113,6 +114,7 @@ const BuyerDetailsModal = ({ isOpen, onClose, buyerId, notificationData }) => {
             const response = await fetch(`${API}/api/contracts/accept`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
+                credentials: 'include',
                 body: JSON.stringify({
                     listingId: notificationData?.listing_id,
                     farmerId: user.id, // Current user is the Farmer

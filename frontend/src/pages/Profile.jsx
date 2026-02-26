@@ -130,8 +130,8 @@ const Profile = () => {
     const fetchReviews = async () => {
         try {
             const userId = user.uuid || user.id;
-            const API = import.meta.env.VITE_API_URL || 'http://localhost:5001';
-            const response = await fetch(`${API}/api/ratings/farmer/${userId}/details`);
+            const API = import.meta.env.VITE_API_URL || 'https://farmer-portal.onrender.com';
+            const response = await fetch(`${API}/api/ratings/farmer/${userId}/details`, { credentials: 'include' });
             if (response.ok) {
                 const data = await response.json();
                 setReviews(data.ratings || []);
@@ -191,6 +191,7 @@ const Profile = () => {
                 headers: {
                     'Content-Type': 'application/json'
                 },
+                credentials: 'include',
                 body: JSON.stringify({ userId: user.uuid || user.id })
             });
 
