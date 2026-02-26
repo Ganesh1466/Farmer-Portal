@@ -12,18 +12,21 @@ const fs = require('fs');
 const app = express();
 const server = http.createServer(app);
 
+const allowedOrigins = process.env.FRONTEND_URL
+    ? process.env.FRONTEND_URL.split(',')
+    : [
+        "https://farmer-portal-xi.vercel.app",
+        "http://localhost:5173",
+        "http://localhost:5174",
+        "http://localhost:5175",
+        "http://localhost:5176",
+        "http://localhost:5177",
+    ];
+
 const io = new Server(server, {
     cors: {
-        origin: process.env.FRONTEND_URL
-            ? process.env.FRONTEND_URL.split(',')
-            : [
-                "http://localhost:5173",
-                "http://localhost:5174",
-                "http://localhost:5175",
-                "http://localhost:5176",
-                "http://localhost:5177",
-            ],
-        methods: ["GET", "POST"],
+        origin: allowedOrigins,
+        methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
         credentials: true,
     },
 });
@@ -36,11 +39,7 @@ app.use(cors({
     origin: process.env.FRONTEND_URL
         ? process.env.FRONTEND_URL.split(',')
         : [
-            "http://localhost:5173",
-            "http://localhost:5174",
-            "http://localhost:5175",
-            "http://localhost:5176",
-            "http://localhost:5177",
+            "https://farmer-portal.onrender.com",
         ],
     credentials: true,
 }));
