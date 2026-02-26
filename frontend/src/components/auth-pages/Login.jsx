@@ -146,7 +146,7 @@ const Login = () => {
             const { error } = await supabase.auth.signInWithOAuth({
                 provider: 'google',
                 options: {
-                    redirectTo: `${window.location.origin}/`, // Redirect to Home
+                    redirectTo: window.location.hostname === 'localhost' ? window.location.origin : "https://farmer-portal-xi.vercel.app",
                     queryParams: {
                         access_type: 'offline',
                         prompt: 'consent',
