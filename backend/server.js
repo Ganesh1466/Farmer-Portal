@@ -28,49 +28,36 @@ if (!allowedOrigins.includes("https://farmer-portal-xi.vercel.app")) {
   allowedOrigins.push("https://farmer-portal-xi.vercel.app");
 }
 
-// ✅ Express CORS options (REST API)
+// ✅ One common CORS checker
+function checkOrigin(origin, callback) {
+  if (!origin) return callback(null, true); // Postman etc.
+  if (allowedOrigins.includes(origin)) return callback(null, true);
+  return callback(new Error("Not allowed by CORS: " + origin), false);
+}
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    // allow requests with no origin (Postman, server-to-server)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) return callback(null, true);
-
-    return callback(new Error("Not allowed by CORS: " + origin));
-  },
+// ✅ Express CORS
+app.use(cors({
+  origin: checkOrigin,
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-
-};
-
-
-// ✅ Middleware
-app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
-      return callback(null, true);
-    }
-    return callback(new Error("Not allowed by CORS: " + origin));
-  },
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  credentials: true
 }));
-app.options(/.*/, cors()); // ✅ preflight fix
+
+// ✅ Preflight must use SAME cors config
+app.options("*", cors({
+  origin: checkOrigin,
+  credentials: true,
+}));
+
 app.use(express.json());
 
-// ✅ Socket.io with specific CORS as requested
+// ✅ Socket.IO with CORS (THIS FIXES YOUR ERROR)
 const io = new Server(server, {
   cors: {
-    origin: [
-      "https://farmer-portal-xi.vercel.app",
-      "http://localhost:5173"
-    ],
+    origin: checkOrigin,
+    credentials: true,
     methods: ["GET", "POST"],
-    credentials: true
-  }
+  },
 });
 
 // Make io globally available
@@ -139,8 +126,5 @@ if (!fs.existsSync("./uploads")) {
 const PORT = process.env.PORT || 5001;
 server.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
-  console.log(`Allowed Origins:`, allowedOrigins);
-  console.log(`🔵 Gemini: ${process.env.GEMINI_API_KEY ? "Key found ✅" : "Key missing ❌"}`);
-  console.log(`🟢 OpenAI: ${process.env.OPENAI_API_KEY ? "Key found ✅" : "Key missing ❌"}`);
-  console.log(`🔐 Supabase: ${process.env.SUPABASE_URL ? "URL found ✅" : "URL missing ❌"}`);
+  console.log("Allowed Origins:", allowedOrigins);
 });
