@@ -60,8 +60,8 @@ app.use(express.json());
 // ✅ Socket.io with specific CORS as requested
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:5173",
-    methods: ["GET", "POST"],
+    origin: allowedOrigins,
+    methods: ["GET", "POST", "OPTIONS"],
     credentials: true,
   },
 });
