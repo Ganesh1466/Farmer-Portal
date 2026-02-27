@@ -44,7 +44,7 @@ app.use(cors({
 }));
 
 // ✅ Preflight must use SAME cors config
-app.options("*", cors({
+app.options(/.*/, cors({
   origin: checkOrigin,
   credentials: true,
 }));
