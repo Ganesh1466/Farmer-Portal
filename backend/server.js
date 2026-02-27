@@ -13,16 +13,20 @@ const app = express();
 const server = http.createServer(app);
 
 // ✅ Allowed origins (frontend URLs)
-const allowedOrigins = process.env.FRONTEND_URL
+let allowedOrigins = process.env.FRONTEND_URL
   ? process.env.FRONTEND_URL.split(",").map((s) => s.trim())
   : [
-    "https://farmer-portal-xi.vercel.app",
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:5175",
     "http://localhost:5176",
     "http://localhost:5177",
   ];
+
+// Always ensure the Vercel production URL is allowed
+if (!allowedOrigins.includes("https://farmer-portal-xi.vercel.app")) {
+  allowedOrigins.push("https://farmer-portal-xi.vercel.app");
+}
 
 // ✅ Express CORS options (REST API)
 
@@ -60,10 +64,13 @@ app.use(express.json());
 // ✅ Socket.io with specific CORS as requested
 const io = new Server(server, {
   cors: {
-    origin: allowedOrigins,
-    methods: ["GET", "POST", "OPTIONS"],
-    credentials: true,
-  },
+    origin: [
+      "https://farmer-portal-xi.vercel.app",
+      "http://localhost:5173"
+    ],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
 });
 
 // Make io globally available

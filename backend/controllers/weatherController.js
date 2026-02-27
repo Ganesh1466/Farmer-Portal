@@ -8,6 +8,11 @@ const getWeather = async (req, res) => {
             return res.status(400).json({ error: "City parameter is required" });
         }
 
+        if (!process.env.WEATHER_API_KEY) {
+            console.error("WEATHER_API_KEY is not configured in the environment variables.");
+            return res.status(500).json({ error: "Weather API Key is not configured on the server." });
+        }
+
         const response = await axios.get(
             `https://api.weatherapi.com/v1/forecast.json`,
             {
