@@ -1,18 +1,15 @@
 import axios from 'axios';
 
-const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
-const BASE_URL = 'https://api.weatherapi.com/v1';
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001';
 
 export const fetchWeather = async (city, days = 7) => {
     try {
-        const response = await axios.get(`${BASE_URL}/forecast.json`, {
+        const response = await axios.get(`${API_URL}/api/weather`, {
             params: {
-                key: API_KEY,
-                q: city,
+                city: city,
                 days: days,
-                aqi: 'no',
-                alerts: 'no',
             },
+            withCredentials: true,
         });
         return response.data;
     } catch (error) {
