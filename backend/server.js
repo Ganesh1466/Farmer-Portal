@@ -25,7 +25,7 @@ const allowedOrigins = process.env.FRONTEND_URL
   ];
 
 // ✅ Express CORS options (REST API)
-/*
+
 const corsOptions = {
   origin: function (origin, callback) {
     // allow requests with no origin (Postman, server-to-server)
@@ -38,13 +38,19 @@ const corsOptions = {
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  
+
 };
-*/
+
 
 // ✅ Middleware
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin) || allowedOrigins.includes('*')) {
+      return callback(null, true);
+    }
+    return callback(new Error("Not allowed by CORS: " + origin));
+  },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   credentials: true
 }));
