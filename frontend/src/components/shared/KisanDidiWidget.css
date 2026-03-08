@@ -1,0 +1,464 @@
+/* ═══════════════════════════════════════════
+   🌾 Kisan Didi Widget — Indian Farm Theme
+   ═══════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap');
+
+.kisan-didi-widget {
+    position: fixed;
+    bottom: 24px;
+    left: 24px;
+    z-index: 1000;
+    font-family: 'Noto Sans Devanagari', 'Segoe UI', sans-serif;
+}
+
+/* ── Floating Button ── */
+.kd-toggle-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 50%, #c2410c 100%);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    color: white;
+    font-size: 28px;
+    cursor: pointer;
+    box-shadow:
+        0 4px 20px rgba(249, 115, 22, 0.5),
+        0 0 0 0 rgba(249, 115, 22, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: kd-breathe 3s ease-in-out infinite;
+    position: relative;
+    overflow: visible;
+}
+
+@keyframes kd-breathe {
+    0%, 100% { box-shadow: 0 4px 20px rgba(249, 115, 22, 0.5), 0 0 0 0 rgba(249, 115, 22, 0.3); }
+    50% { box-shadow: 0 6px 24px rgba(249, 115, 22, 0.6), 0 0 0 8px rgba(249, 115, 22, 0); }
+}
+
+.kd-toggle-btn:hover {
+    transform: scale(1.12) rotate(-5deg);
+    box-shadow: 0 8px 28px rgba(249, 115, 22, 0.6);
+}
+
+.kd-toggle-btn:active {
+    transform: scale(0.95);
+}
+
+.kd-toggle-btn .kd-btn-label {
+    position: absolute;
+    top: -8px;
+    right: -12px;
+    background: #16a34a;
+    color: white;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 10px;
+    white-space: nowrap;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Chat Window ── */
+.kd-chat-window {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 400px;
+    height: 540px;
+    border-radius: 20px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow:
+        0 12px 48px rgba(0, 0, 0, 0.18),
+        0 0 0 1px rgba(249, 115, 22, 0.15);
+    animation: kd-slide-up 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #fefce8;
+}
+
+@keyframes kd-slide-up {
+    from { opacity: 0; transform: translateY(24px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── Header ── */
+.kd-header {
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 40%, #dc2626 100%);
+    color: white;
+    padding: 16px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.kd-header::before {
+    content: '';
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    width: 80px;
+    height: 80px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 50%;
+}
+
+.kd-header-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    z-index: 1;
+}
+
+.kd-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.kd-header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.kd-header-title {
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+}
+
+.kd-header-subtitle {
+    font-size: 11px;
+    opacity: 0.85;
+    margin-top: 1px;
+}
+
+.kd-status-dot {
+    width: 7px;
+    height: 7px;
+    background: #4ade80;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 4px;
+    animation: kd-pulse 2s infinite;
+}
+
+@keyframes kd-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+.kd-close-btn {
+    background: rgba(255, 255, 255, 0.15);
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    z-index: 1;
+}
+
+.kd-close-btn:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+/* ── Messages Area ── */
+.kd-messages {
+    flex: 1;
+    padding: 16px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background: linear-gradient(180deg, #fefce8 0%, #fff7ed 100%);
+}
+
+.kd-messages::-webkit-scrollbar {
+    width: 5px;
+}
+
+.kd-messages::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.kd-messages::-webkit-scrollbar-thumb {
+    background: #d6d3d1;
+    border-radius: 3px;
+}
+
+/* ── Message Bubbles ── */
+.kd-msg {
+    max-width: 82%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    animation: kd-fade-in 0.35s ease;
+    line-height: 1.6;
+    font-size: 14px;
+    position: relative;
+}
+
+@keyframes kd-fade-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.kd-msg.kd-user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    color: white;
+    border-bottom-right-radius: 6px;
+}
+
+.kd-msg.kd-bot {
+    align-self: flex-start;
+    background: white;
+    color: #292524;
+    border: 1px solid #fed7aa;
+    border-bottom-left-radius: 6px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.kd-msg-time {
+    font-size: 10px;
+    opacity: 0.6;
+    margin-top: 4px;
+    display: block;
+}
+
+/* ── Typing Indicator ── */
+.kd-typing {
+    align-self: flex-start;
+    background: white;
+    border: 1px solid #fed7aa;
+    padding: 14px 18px;
+    border-radius: 18px;
+    border-bottom-left-radius: 6px;
+    display: flex;
+    gap: 5px;
+    animation: kd-fade-in 0.3s ease;
+}
+
+.kd-typing-dot {
+    width: 8px;
+    height: 8px;
+    background: #f97316;
+    border-radius: 50%;
+    animation: kd-bounce 1.4s infinite;
+}
+
+.kd-typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.kd-typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes kd-bounce {
+    0%, 60%, 100% { transform: translateY(0); }
+    30% { transform: translateY(-10px); }
+}
+
+/* ── Speaking Animation ── */
+.kd-speaking-indicator {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: rgba(249, 115, 22, 0.1);
+    border-radius: 20px;
+    font-size: 12px;
+    color: #ea580c;
+    font-weight: 500;
+}
+
+.kd-sound-wave {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 16px;
+}
+
+.kd-sound-bar {
+    width: 3px;
+    background: #f97316;
+    border-radius: 2px;
+    animation: kd-wave 0.8s ease-in-out infinite;
+}
+
+.kd-sound-bar:nth-child(1) { height: 6px; animation-delay: 0s; }
+.kd-sound-bar:nth-child(2) { height: 12px; animation-delay: 0.1s; }
+.kd-sound-bar:nth-child(3) { height: 8px; animation-delay: 0.2s; }
+.kd-sound-bar:nth-child(4) { height: 14px; animation-delay: 0.3s; }
+.kd-sound-bar:nth-child(5) { height: 6px; animation-delay: 0.4s; }
+
+@keyframes kd-wave {
+    0%, 100% { transform: scaleY(1); }
+    50% { transform: scaleY(1.8); }
+}
+
+/* ── Input Area ── */
+.kd-input-area {
+    padding: 14px 16px;
+    background: white;
+    border-top: 1px solid #fed7aa;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.kd-text-input {
+    flex: 1;
+    padding: 11px 16px;
+    border: 1.5px solid #e7e5e4;
+    border-radius: 24px;
+    outline: none;
+    font-size: 14px;
+    font-family: 'Noto Sans Devanagari', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    background: #fafaf9;
+}
+
+.kd-text-input:focus {
+    border-color: #f97316;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.1);
+    background: white;
+}
+
+.kd-text-input::placeholder {
+    color: #a8a29e;
+}
+
+/* Mic Button */
+.kd-mic-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    transition: all 0.3s;
+    flex-shrink: 0;
+    background: #f5f5f4;
+    color: #78716c;
+}
+
+.kd-mic-btn:hover {
+    background: #fee2e2;
+    color: #ef4444;
+}
+
+.kd-mic-btn.kd-listening {
+    background: #ef4444;
+    color: white;
+    animation: kd-mic-pulse 1.2s infinite;
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+}
+
+@keyframes kd-mic-pulse {
+    0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
+    70% { box-shadow: 0 0 0 12px rgba(239, 68, 68, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+}
+
+/* Send Button */
+.kd-send-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.kd-send-btn:hover:not(:disabled) {
+    transform: scale(1.08);
+    box-shadow: 0 4px 14px rgba(249, 115, 22, 0.4);
+}
+
+.kd-send-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* ── Language Toggle ── */
+.kd-lang-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 6px 16px;
+    background: #fffbeb;
+    border-top: 1px solid #fef3c7;
+    font-size: 11px;
+    color: #92400e;
+}
+
+.kd-lang-bar label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+}
+
+.kd-lang-bar input[type="checkbox"] {
+    accent-color: #f97316;
+}
+
+/* ── Error ── */
+.kd-error {
+    background: #fef2f2;
+    color: #991b1b;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #fecaca;
+    font-size: 13px;
+    text-align: center;
+    margin: 0 4px;
+}
+
+/* ── Mobile ── */
+@media (max-width: 640px) {
+    .kd-chat-window {
+        width: calc(100vw - 32px);
+        height: calc(100vh - 120px);
+        max-height: 600px;
+        left: -8px;
+    }
+
+    .kisan-didi-widget {
+        bottom: 16px;
+        left: 16px;
+    }
+
+    .kd-toggle-btn {
+        width: 56px;
+        height: 56px;
+        font-size: 24px;
+    }
+}

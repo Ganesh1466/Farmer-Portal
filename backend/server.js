@@ -24,8 +24,8 @@ let allowedOrigins = process.env.FRONTEND_URL
   ];
 
 // Always ensure the Vercel production URL is allowed
-if (!allowedOrigins.includes("https://farmer-portal-xi.vercel.app")) {
-  allowedOrigins.push("https://farmer-portal-xi.vercel.app");
+if (!allowedOrigins.includes("http://localhost:5173" || "https://farmer-portal-xi.vercel.app")) {
+  allowedOrigins.push("http://localhost:5173" || "https://farmer-portal-xi.vercel.app");
 }
 
 // ✅ One common CORS checker
@@ -90,18 +90,17 @@ io.on("connection", (socket) => {
 // Routes — all requires are AFTER dotenv.config() so env vars are available
 const cropRoutes = require("./routes/cropRoutes");
 const seasonRoutes = require("./routes/seasonRoutes");
-const mandiRoutes = require("./routes/mandiRoutes");
-const chatRoutes = require("./routes/openai.Routes.js");
+const mandiRoutes = require("./routes/mandiRoutes");;
 const notificationRoutes = require("./routes/notificationRoutes");
 const contractRoutes = require("./routes/contractRoutes");
 const ratingRoutes = require("./routes/ratingRoutes");
 const authRoutes = require("./routes/authRoutes");
 const weatherRoutes = require('./routes/weatherRoutes');
 
+
 app.use("/api/crops", cropRoutes);
 app.use("/api/seasons", seasonRoutes);
-app.use("/api/mandi", mandiRoutes);
-app.use("/api", chatRoutes);
+app.use("/api", mandiRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/contracts", contractRoutes);
 app.use("/api/ratings", ratingRoutes);

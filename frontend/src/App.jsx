@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import Navbar from './components/shared/Navbar';
 import Footer from './components/shared/Footer';
-import FloatingChatWidget from './components/shared/FloatingChatWidget';
 import Home from './pages/Home';
 import Advisory from './pages/Advisory';
 import Crops from './pages/Crops';
@@ -44,7 +43,6 @@ function App() {
         </Routes>
       </main>
       <Footer />
-      <FloatingChatWidget />
     </div>
   );
 }

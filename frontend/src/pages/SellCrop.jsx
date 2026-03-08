@@ -78,19 +78,17 @@ const SellCrop = () => {
     const fetchListings = async () => {
         try {
             setLoading(true);
-            const userId = user.uuid || user.id;
-
             const { data, error } = await supabase
                 .from('crop_listings')
                 .select('*')
-                .eq('seller_id', userId)
+                .eq('seller_id', user.id)
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
             setListings(data || []);
         } catch (error) {
             console.error('Error fetching listings:', error);
-            setMessage('Error loading your listings');
+            setMessage(`Error fetching listings: ${error.message}`);
         } finally {
             setLoading(false);
         }
@@ -99,9 +97,30 @@ const SellCrop = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        if (!user) {
+            setMessage('User not authenticated');
+            return;
+        }
+
+        if (!formData.crop_name) {
+            setMessage('Please select crop type');
+            return;
+        }
+
+        if (!formData.quantity || isNaN(formData.quantity)) {
+            setMessage('Valid quantity required');
+            return;
+        }
+
+        if (!formData.price_per_unit || isNaN(formData.price_per_unit)) {
+            setMessage('Valid price required');
+            return;
+        }
+
         try {
             setLoading(true);
-            const userId = user.uuid || user.id;
+
+            const userId = user.id;
 
             const finalCropName =
                 formData.crop_name === 'Other'
@@ -127,6 +146,7 @@ const SellCrop = () => {
                     .eq('id', editingId);
 
                 if (error) throw error;
+
                 setMessage('Listing updated successfully!');
             } else {
                 const { error } = await supabase
@@ -134,12 +154,14 @@ const SellCrop = () => {
                     .insert([listingData]);
 
                 if (error) throw error;
+
                 setMessage('Listing created successfully!');
             }
 
             resetForm();
             fetchListings();
             setTimeout(() => setMessage(''), 3000);
+
         } catch (error) {
             console.error('Error saving listing:', error);
             setMessage(`Error: ${error.message || JSON.stringify(error)}`);
@@ -147,7 +169,6 @@ const SellCrop = () => {
             setLoading(false);
         }
     };
-
     const uploadImage = async (event) => {
         try {
             setUploading(true);

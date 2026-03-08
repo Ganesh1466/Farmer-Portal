@@ -1,0 +1,306 @@
+// ─────────────────────────────────────────────────────────────────────────────
+//  India Mandi Structure — All States → Districts → Mandis
+//  Used by the route layer to answer /api/states, /api/districts, /api/mandis
+// ─────────────────────────────────────────────────────────────────────────────
+
+// State → [Districts]
+const indiaMandiStructure = {
+    "Andhra Pradesh": ["Anantapur", "Chittoor", "East Godavari", "Guntur", "Krishna", "Kurnool", "Nellore", "Prakasam", "Srikakulam", "Visakhapatnam", "Vizianagaram", "West Godavari", "YSR Kadapa"],
+    "Arunachal Pradesh": ["Tawang", "West Kameng", "East Kameng", "Papum Pare", "Kurung Kumey", "Kra Daadi", "Lower Subansiri", "Upper Subansiri", "West Siang", "East Siang", "Siang", "Upper Siang", "Lower Siang", "Lower Dibang Valley", "Dibang Valley", "Anjaw", "Lohit", "Namsai", "Changlang", "Tirap", "Longding"],
+    "Assam": ["Baksa", "Barpeta", "Biswanath", "Bongaigaon", "Cachar", "Charaideo", "Chirang", "Darrang", "Dhemaji", "Dhubri", "Dibrugarh", "Dima Hasao", "Goalpara", "Golaghat", "Hailakandi", "Hojai", "Jorhat", "Kamrup", "Kamrup Metropolitan", "Karbi Anglong", "Karimganj", "Kokrajhar", "Lakhimpur", "Majuli", "Morigaon", "Nagaon", "Nalbari", "Sivasagar", "Sonitpur", "South Salmara-Mankachar", "Tinsukia", "Udalguri", "West Karbi Anglong"],
+    "Bihar": ["Araria", "Arwal", "Aurangabad", "Banka", "Begusarai", "Bhagalpur", "Bhojpur", "Buxar", "Darbhanga", "East Champaran", "Gaya", "Gopalganj", "Jamui", "Jehanabad", "Kaimur", "Katihar", "Khagaria", "Kishanganj", "Lakhisarai", "Madhepura", "Madhubani", "Munger", "Muzaffarpur", "Nalanda", "Nawada", "Patna", "Purnia", "Rohtas", "Saharsa", "Samastipur", "Saran", "Sheikhpura", "Sheohar", "Sitamarhi", "Siwan", "Supaul", "Vaishali", "West Champaran"],
+    "Chhattisgarh": ["Balod", "Baloda Bazar", "Balrampur", "Bastar", "Bemetara", "Bijapur", "Bilaspur", "Dantewada", "Dhamtari", "Durg", "Gariaband", "Janjgir-Champa", "Jashpur", "Kabirdham", "Kanker", "Kondagaon", "Korba", "Koriya", "Mahasamund", "Mungeli", "Narayanpur", "Raigarh", "Raipur", "Rajnandgaon", "Sukma", "Surajpur", "Surguja"],
+    "Goa": ["North Goa", "South Goa"],
+    "Gujarat": ["Ahmedabad", "Amreli", "Anand", "Aravalli", "Banaskantha", "Bharuch", "Bhavnagar", "Botad", "Chhota Udaipur", "Dahod", "Dang", "Devbhoomi Dwarka", "Gandhinagar", "Gir Somnath", "Jamnagar", "Junagadh", "Kheda", "Kutch", "Mahisagar", "Mehsana", "Morbi", "Narmada", "Navsari", "Panchmahal", "Patan", "Porbandar", "Rajkot", "Sabarkantha", "Surat", "Surendranagar", "Tapi", "Vadodara", "Valsad"],
+    "Haryana": ["Ambala", "Bhiwani", "Charkhi Dadri", "Faridabad", "Fatehabad", "Gurugram", "Hisar", "Jhajjar", "Jind", "Kaithal", "Karnal", "Kurukshetra", "Mahendragarh", "Nuh", "Palwal", "Panchkula", "Panipat", "Rewari", "Rohtak", "Sirsa", "Sonipat", "Yamunanagar"],
+    "Himachal Pradesh": ["Bilaspur", "Chamba", "Hamirpur", "Kangra", "Kinnaur", "Kullu", "Lahaul and Spiti", "Mandi", "Shimla", "Sirmaur", "Solan", "Una"],
+    "Jharkhand": ["Bokaro", "Chatra", "Deoghar", "Dhanbad", "Dumka", "East Singhbhum", "Garhwa", "Giridih", "Godda", "Gumla", "Hazaribagh", "Jamtara", "Khunti", "Koderma", "Latehar", "Lohardaga", "Pakur", "Palamu", "Ramgarh", "Ranchi", "Sahibganj", "Seraikela Kharsawan", "Simdega", "West Singhbhum"],
+    "Karnataka": ["Bagalkot", "Ballari", "Belagavi", "Bengaluru Rural", "Bengaluru Urban", "Bidar", "Chamarajanagar", "Chikkaballapura", "Chikkamagaluru", "Chitradurga", "Dakshina Kannada", "Davangere", "Dharwad", "Gadag", "Hassan", "Haveri", "Kalaburagi", "Kodagu", "Kolar", "Koppal", "Mandya", "Mysuru", "Raichur", "Ramanagara", "Shivamogga", "Tumakuru", "Udupi", "Uttara Kannada", "Vijayapura", "Yadgir"],
+    "Kerala": ["Alappuzha", "Ernakulam", "Idukki", "Kannur", "Kasaragod", "Kollam", "Kottayam", "Kozhikode", "Malappuram", "Palakkad", "Pathanamthitta", "Thiruvananthapuram", "Thrissur", "Wayanad"],
+    "Madhya Pradesh": ["Agar Malwa", "Alirajpur", "Anuppur", "Ashoknagar", "Balaghat", "Barwani", "Betul", "Bhind", "Bhopal", "Burhanpur", "Chhatarpur", "Chhindwara", "Damoh", "Datia", "Dewas", "Dhar", "Dindori", "Guna", "Gwalior", "Harda", "Hoshangabad", "Indore", "Jabalpur", "Jhabua", "Katni", "Khandwa", "Khargone", "Mandla", "Mandsaur", "Morena", "Narsinghpur", "Neemuch", "Panna", "Raisen", "Rajgarh", "Ratlam", "Rewa", "Sagar", "Satna", "Sehore", "Seoni", "Shahdol", "Shajapur", "Sheopur", "Shivpuri", "Sidhi", "Singrauli", "Tikamgarh", "Ujjain", "Umaria", "Vidisha"],
+    "Maharashtra": ["Ahmednagar", "Akola", "Amravati", "Aurangabad", "Beed", "Bhandara", "Buldana", "Chandrapur", "Dhule", "Gadchiroli", "Gondia", "Hingoli", "Jalgaon", "Jalna", "Kolhapur", "Latur", "Mumbai City", "Mumbai Suburban", "Nagpur", "Nanded", "Nandurbar", "Nashik", "Osmanabad", "Palghar", "Parbhani", "Pune", "Raigad", "Ratnagiri", "Sangli", "Satara", "Sindhudurg", "Solapur", "Thane", "Wardha", "Washim", "Yavatmal"],
+    "Manipur": ["Bishnupur", "Chandel", "Churachandpur", "Imphal East", "Imphal West", "Jiribam", "Kakching", "Kamjong", "Kangpokpi", "Noney", "Pherzawl", "Senapati", "Tamenglong", "Tengnoupal", "Thoubal", "Ukhrul"],
+    "Meghalaya": ["East Garo Hills", "East Jaintia Hills", "East Khasi Hills", "North Garo Hills", "Ri Bhoi", "South Garo Hills", "South West Garo Hills", "South West Khasi Hills", "West Garo Hills", "West Jaintia Hills", "West Khasi Hills"],
+    "Mizoram": ["Aizawl", "Champhai", "Kolasib", "Lawngtlai", "Lunglei", "Mamit", "Saiha", "Serchhip"],
+    "Nagaland": ["Dimapur", "Kiphire", "Kohima", "Longleng", "Mokokchung", "Mon", "Peren", "Phek", "Tuensang", "Wokha", "Zunheboto"],
+    "Odisha": ["Angul", "Balangir", "Balasore", "Bargarh", "Bhadrak", "Boudh", "Cuttack", "Deogarh", "Dhenkanal", "Gajapati", "Ganjam", "Jagatsinghpur", "Jajpur", "Jharsuguda", "Kalahandi", "Kandhamal", "Kendrapara", "Kendujhar", "Khordha", "Koraput", "Malkangiri", "Mayurbhanj", "Nabarangpur", "Nayagarh", "Nuapada", "Puri", "Rayagada", "Sambalpur", "Subarnapur", "Sundargarh"],
+    "Punjab": ["Amritsar", "Barnala", "Bathinda", "Faridkot", "Fatehgarh Sahib", "Fazilka", "Ferozepur", "Gurdaspur", "Hoshiarpur", "Jalandhar", "Kapurthala", "Ludhiana", "Mansa", "Moga", "Muktsar", "Nawanshahr (Shahid Bhagat Singh Nagar)", "Pathankot", "Patiala", "Rupnagar", "Sahibzada Ajit Singh Nagar (Mohali)", "Sangrur", "Tarn Taran"],
+    "Rajasthan": ["Ajmer", "Alwar", "Banswara", "Baran", "Barmer", "Bharatpur", "Bhilwara", "Bikaner", "Bundi", "Chittorgarh", "Churu", "Dausa", "Dholpur", "Dungarpur", "Hanumangarh", "Jaipur", "Jaisalmer", "Jalore", "Jhalawar", "Jhunjhunu", "Jodhpur", "Karauli", "Kota", "Nagaur", "Pali", "Pratapgarh", "Rajsamand", "Sawai Madhopur", "Sikar", "Sirohi", "Sri Ganganagar", "Tonk", "Udaipur"],
+    "Sikkim": ["East Sikkim", "North Sikkim", "South Sikkim", "West Sikkim"],
+    "Tamil Nadu": ["Ariyalur", "Chengalpattu", "Chennai", "Coimbatore", "Cuddalore", "Dharmapuri", "Dindigul", "Erode", "Kallakurichi", "Kanchipuram", "Kanyakumari", "Karur", "Krishnagiri", "Madurai", "Mayiladuthurai", "Nagapattinam", "Namakkal", "Nilgiris", "Perambalur", "Pudukkottai", "Ramanathapuram", "Ranipet", "Salem", "Sivaganga", "Tenkasi", "Thanjavur", "Theni", "Thoothukudi", "Tiruchirappalli", "Tirunelveli", "Tirupattur", "Tiruppur", "Tiruvallur", "Tiruvannamalai", "Tiruvarur", "Vellore", "Viluppuram", "Virudhunagar"],
+    "Telangana": ["Adilabad", "Bhadradri Kothagudem", "Hyderabad", "Jagtial", "Jangaon", "Jayashankar Bhupalpally", "Jogulamba Gadwal", "Kamareddy", "Karimnagar", "Khammam", "Komaram Bheem Asifabad", "Mahabubabad", "Mahabubnagar", "Mancherial", "Medak", "Medchal", "Nagarkurnool", "Nalgonda", "Nirmal", "Nizamabad", "Peddapalli", "Rajanna Sircilla", "Rangareddy", "Sangareddy", "Siddipet", "Suryapet", "Vikarabad", "Wanaparthy", "Warangal (Rural)", "Warangal (Urban)", "Yadadri Bhuvanagiri"],
+    "Tripura": ["Dhalai", "Gomati", "Khowai", "North Tripura", "Sepahijala", "South Tripura", "Unakoti", "West Tripura"],
+    "Uttar Pradesh": ["Agra", "Aligarh", "Ambedkar Nagar", "Amethi", "Amroha", "Auraiya", "Ayodhya", "Azamgarh", "Baghpat", "Bahraich", "Ballia", "Balrampur", "Banda", "Barabanki", "Bareilly", "Basti", "Bhadohi", "Bijnor", "Budaun", "Bulandshahr", "Chandauli", "Chitrakoot", "Deoria", "Etah", "Etawah", "Farrukhabad", "Fatehpur", "Firozabad", "Gautam Buddha Nagar", "Ghaziabad", "Ghazipur", "Gonda", "Gorakhpur", "Hamirpur", "Hapur", "Hardoi", "Hathras", "Jalaun", "Jaunpur", "Jhansi", "Kannauj", "Kanpur Dehat", "Kanpur Nagar", "Kasganj", "Kaushambi", "Kheri", "Kushinagar", "Lalitpur", "Lucknow", "Maharajganj", "Mahoba", "Mainpuri", "Mathura", "Mau", "Meerut", "Mirzapur", "Moradabad", "Muzaffarnagar", "Pilibhit", "Pratapgarh", "Prayagraj", "Raebareli", "Rampur", "Saharanpur", "Sambhal", "Sant Kabir Nagar", "Shahjahanpur", "Shamli", "Shravasti", "Siddharthnagar", "Sitapur", "Sonbhadra", "Sultanpur", "Unnao", "Varanasi"],
+    "Uttarakhand": ["Almora", "Bageshwar", "Chamoli", "Champawat", "Dehradun", "Haridwar", "Nainital", "Pauri Garhwal", "Pithoragarh", "Rudraprayag", "Tehri Garhwal", "Udham Singh Nagar", "Uttarkashi"],
+    "West Bengal": ["Alipurduar", "Bankura", "Birbhum", "Cooch Behar", "Dakshin Dinajpur", "Darjeeling", "Hooghly", "Howrah", "Jalpaiguri", "Jhargram", "Kalimpong", "Kolkata", "Malda", "Murshidabad", "Nadia", "North 24 Parganas", "Paschim Bardhaman", "Paschim Medinipur", "Purba Bardhaman", "Purba Medinipur", "Purulia", "South 24 Parganas", "Uttar Dinajpur"],
+    "Delhi": ["Central Delhi", "East Delhi", "New Delhi", "North Delhi", "North East Delhi", "North West Delhi", "Shahdara", "South Delhi", "South East Delhi", "South West Delhi", "West Delhi"],
+    "Jammu and Kashmir": ["Anantnag", "Bandipora", "Baramulla", "Budgam", "Doda", "Ganderbal", "Jammu", "Kathua", "Kishtwar", "Kulgam", "Kupwara", "Poonch", "Pulwama", "Rajouri", "Ramban", "Reasi", "Samba", "Shopian", "Srinagar", "Udhampur"],
+    "Puducherry": ["Karaikal", "Mahe", "Puducherry", "Yanam"]
+};
+
+// District → [Mandis]  (curated list; fallback is generated automatically)
+const districtMandis = {
+    // ── Andhra Pradesh ─────────────────────────────────────────────────────────
+    "Anantapur": ["Anantapur APMC", "Hindupur APMC", "Guntakal APMC", "Tadipatri APMC", "Kadiri APMC"],
+    "Chittoor": ["Chittoor APMC", "Madanapalle Market Yard", "Palamaner APMC", "Punganur APMC"],
+    "East Godavari": ["Kakinada APMC", "Rajahmundry Market Yard", "Mandapeta APMC", "Amalapuram APMC"],
+    "Guntur": ["Guntur Mirchi Yard", "Tenali APMC", "Narasaraopet APMC", "Sattenapalle APMC"],
+    "Krishna": ["Vijayawada APMC", "Machilipatnam Market Yard", "Gudivada APMC", "Nuzvid APMC"],
+    "Kurnool": ["Kurnool APMC", "Adoni Market Yard", "Nandyal APMC", "Yemmiganur APMC"],
+    "Nellore": ["Nellore APMC", "Gudur Market Yard", "Kavali APMC", "Atmakur APMC"],
+    "Prakasam": ["Ongole APMC", "Chirala Market Yard", "Markapur APMC", "Kandukur APMC"],
+    "Srikakulam": ["Srikakulam APMC", "Tekkali Market Yard", "Palasa APMC", "Amadalavalasa APMC"],
+    "Visakhapatnam": ["Visakhapatnam APMC", "Anakapalle Market Yard", "Narsipatnam APMC"],
+    "Vizianagaram": ["Vizianagaram APMC", "Bobbili Market Yard", "Parvathipuram APMC", "Salur APMC"],
+    "West Godavari": ["Eluru APMC", "Tadepalligudem Market Yard", "Bhimavaram APMC", "Palakollu APMC"],
+    "YSR Kadapa": ["Kadapa APMC", "Proddatur Market Yard", "Rayachoty APMC", "Pulivendula APMC"],
+
+    // ── Assam ──────────────────────────────────────────────────────────────────
+    "Kamrup": ["Guwahati APMC", "Boko Market Yard", "Rangia APMC", "Palasbari APMC"],
+    "Darrang": ["Kharupetia APMC", "Mangaldoi Market Yard"],
+    "Sonitpur": ["Tezpur APMC", "Dhekiajuli Market Yard", "Biswanath Chariali APMC"],
+    "Nagaon": ["Nagaon APMC", "Dhing Market Yard", "Samaguri APMC"],
+    "Jorhat": ["Jorhat APMC", "Mariani Market Yard", "Titabor APMC"],
+    "Dibrugarh": ["Dibrugarh APMC", "Naharkatia Market Yard", "Tinsukia APMC"],
+    "Cachar": ["Silchar APMC", "Lakhipur Market Yard"],
+    "Barpeta": ["Barpeta Road APMC", "Howly Market Yard"],
+    "Bongaigaon": ["Bongaigaon APMC", "Abhayapuri Market Yard"],
+    "Dhubri": ["Dhubri APMC", "Gauripur Market Yard", "Bilasipara APMC"],
+
+    // ── Bihar ──────────────────────────────────────────────────────────────────
+    "Patna": ["Musallahpur APMC", "Fatuha Market Yard", "Mokama APMC", "Barh APMC", "Bihta Market Yard"],
+    "Muzaffarpur": ["Muzaffarpur APMC", "Motipur Market Yard", "Kanti APMC"],
+    "Bhagalpur": ["Bhagalpur APMC", "Sultanganj Market Yard", "Naugachia APMC"],
+    "Gaya": ["Gaya APMC", "Sherghati Market Yard", "Tekari APMC"],
+    "Purnia": ["Gulabbagh APMC", "Banmankhi Market Yard", "Kasba APMC"],
+
+    // ── Karnataka ─────────────────────────────────────────────────────────────
+    "Kolar": ["Kolar APMC (Tomato Market)", "Bangarapet Market Yard", "Malur APMC", "Mulbagal Market Yard", "Srinivaspur APMC"],
+    "Koppal": ["Koppal APMC", "Gangavathi Market Yard", "Kushtagi APMC", "Yelburga Market Yard"],
+    "Mandya": ["Mandya APMC", "Maddur Market Yard", "Malavalli APMC", "Pandavapura Market Yard", "Nagamangala APMC"],
+    "Mysuru": ["Mysuru APMC (Bandipalya)", "Nanjangud Market Yard", "Hunsur APMC", "T.Narasipura Market Yard", "K.R.Nagar APMC"],
+    "Raichur": ["Raichur APMC", "Manvi Market Yard", "Sindhanur APMC", "Lingasugur Market Yard", "Devadurga APMC"],
+    "Shivamogga": ["Shivamogga APMC", "Sagar Market Yard", "Shikaripura APMC", "Bhadravathi Market Yard", "Thirthahalli APMC"],
+    "Tumakuru": ["Tumakuru APMC", "Tiptur APMC (Copra Market)", "Sira Market Yard", "Madhugiri APMC", "Kunigal Market Yard", "Gubbi APMC"],
+    "Udupi": ["Udupi APMC", "Kundapura Market Yard", "Karkala APMC"],
+    "Uttara Kannada": ["Sirsi APMC", "Kumta Market Yard", "Karwar APMC", "Honnavar Market Yard", "Yellapur APMC"],
+    "Vijayapura": ["Vijayapura APMC", "Indi Market Yard", "Sindagi APMC", "Muddebihal Market Yard", "Basavana Bagewadi APMC"],
+    "Yadgir": ["Yadgir APMC", "Shahapur Market Yard", "Shorapur APMC"],
+
+    // ── Kerala ────────────────────────────────────────────────────────────────
+    "Thiruvananthapuram": ["Nedumangad APMC", "Parassala Market Yard", "Vamanapuram APMC"],
+    "Kollam": ["Kollam APMC", "Anchal Market Yard", "Kottarakkara APMC"],
+    "Pathanamthitta": ["Pathanamthitta APMC", "Adoor Market Yard"],
+    "Alappuzha": ["Alappuzha APMC", "Cherthala Market Yard", "Kayamkulam APMC"],
+    "Kottayam": ["Kottayam APMC", "Changanassery Market Yard", "Pala APMC"],
+    "Idukki": ["Thodupuzha APMC", "Adimali Market Yard", "Kattappana Market Yard"],
+    "Ernakulam": ["Kochi APMC", "Aluva Market Yard", "Muvattupuzha APMC", "Perumbavoor APMC"],
+    "Thrissur": ["Thrissur APMC", "Chalakudy Market Yard", "Kodungallur APMC", "Kunnamkulam Market Yard"],
+    "Palakkad": ["Palakkad APMC", "Alathur Market Yard", "Ottapalam APMC", "Mannarkkad Market Yard"],
+    "Malappuram": ["Manjeri APMC", "Malappuram Market Yard", "Tirur APMC"],
+    "Kozhikode": ["Kozhikode APMC", "Vatakara Market Yard", "Quilandy APMC"],
+    "Wayanad": ["Kalpetta APMC", "Sulthan Bathery Market Yard", "Mananthavady APMC"],
+    "Kannur": ["Kannur APMC", "Thalassery Market Yard", "Taliparamba APMC"],
+    "Kasaragod": ["Kasaragod APMC", "Kanhangad Market Yard", "Nileshwer Market Yard"],
+
+    // ── Madhya Pradesh ────────────────────────────────────────────────────────
+    "Indore": ["Indore APMC (Laxmi Bai Nagar)", "Sanwer Market Yard", "Depalpur APMC", "Mhow APMC"],
+    "Bhopal": ["Bhopal APMC (Karond)", "Berasia Market Yard"],
+    "Ujjain": ["Ujjain APMC", "Mahidpur Market Yard", "Khachrod APMC", "Nagda Market Yard", "Tarana APMC", "Barnagar APMC"],
+    "Dewas": ["Dewas APMC", "Sonkatch Market Yard", "Kannod APMC", "Khategaon Market Yard", "Bagli APMC"],
+    "Dhar": ["Dhar APMC", "Badnawar Market Yard", "Manawar APMC", "Kukshi Market Yard", "Dhamnod APMC"],
+    "Ratlam": ["Ratlam APMC", "Jaora Market Yard", "Sailana APMC", "Alot Market Yard"],
+    "Mandsaur": ["Mandsaur APMC", "Piplia Mandi APMC", "Daloda Market Yard", "Garoth APMC", "Bhanpura Market Yard"],
+    "Neemuch": ["Neemuch APMC", "Jawad Market Yard", "Manasa APMC"],
+    "Gwalior": ["Gwalior APMC", "Dabra Market Yard", "Bhitarwar APMC"],
+    "Jabalpur": ["Jabalpur APMC", "Sihora Market Yard", "Patan APMC", "Shahpura APMC"],
+    "Sagar": ["Sagar APMC", "Bina Market Yard", "Khurai APMC", "Deori Market Yard", "Garhakota APMC"],
+    "Rewa": ["Rewa APMC", "Mangawan Market Yard", "Teonthar APMC", "Hanumana Market Yard"],
+    "Satna": ["Satna APMC", "Maihar Market Yard", "Amarpatan APMC", "Nagod Market Yard"],
+    "Chhindwara": ["Chhindwara APMC", "Pandhurna Market Yard (Orange Market)", "Sauser APMC", "Amarwara Market Yard"],
+    "Vidisha": ["Vidisha APMC", "Ganj Basoda APMC", "Sironj Market Yard", "Kurwai APMC"],
+    "Sehore": ["Sehore APMC", "Ashta APMC", "Nasrullaganj Market Yard", "Ichhawar APMC"],
+    "Hoshangabad": ["Itarsi APMC", "Hoshangabad Market Yard", "Pipariya APMC (Moong Market)", "Babai APMC"],
+    "Raisen": ["Raisen APMC", "Begumganj Market Yard", "Bareli APMC", "Silwani Market Yard"],
+    "Betul": ["Betul APMC", "Multai Market Yard", "Amla APMC", "Bhainsdehi Market Yard"],
+    "Khandwa": ["Khandwa APMC", "Pandhana Market Yard", "Harsud APMC"],
+    "Khargone": ["Khargone APMC", "Sanawad Market Yard", "Bhikangaon APMC", "Barwaha Market Yard", "Kasrawad APMC"],
+    "Barwani": ["Barwani APMC", "Sendhwa Market Yard", "Anjad APMC"],
+    "Shajapur": ["Shajapur APMC", "Shujalpur APMC", "Kalapipal Market Yard"],
+
+    // ── Maharashtra ───────────────────────────────────────────────────────────
+    "Ahmednagar": ["Ahmednagar APMC", "Rahuri Market Yard", "Sangamner APMC", "Shrirampur APMC", "Kopargaon APMC", "Pathardi APMC", "Nevasa APMC", "Jamkhed APMC", "Shevgaon APMC", "Akole APMC", "Karjat APMC", "Parner APMC"],
+    "Akola": ["Akola APMC", "Akot Market Yard", "Balapur APMC", "Patur Market Yard", "Telhara APMC", "Murtizapur Market Yard"],
+    "Amravati": ["Amravati APMC", "Achalpur Market Yard", "Anjangaon Surji APMC", "Chandur Bazar APMC", "Morshi Market Yard", "Warud Market Yard", "Daryapur APMC"],
+    "Aurangabad": ["Aurangabad APMC (Jadhavwadi)", "Paithan Market Yard", "Vaijapur APMC", "Kannad Market Yard", "Gangapur APMC", "Sillod Market Yard", "Phulambri APMC"],
+    "Beed": ["Beed APMC", "Majalgaon Market Yard", "Parli Vaijnath APMC", "Georai Market Yard", "Ashti APMC", "Kaij Market Yard", "Ambejogai APMC"],
+    "Buldana": ["Buldana APMC", "Khamgaon Market Yard", "Chikhli APMC", "Malkapur Market Yard", "Shegaon APMC", "Nandura Market Yard", "Mehkar APMC"],
+    "Chandrapur": ["Chandrapur APMC", "Warora Market Yard", "Chimur APMC", "Mul Market Yard", "Ballarpur APMC", "Gondpipri APMC"],
+    "Dhule": ["Dhule APMC", "Sakri Market Yard", "Shirpur APMC", "Sindkheda Market Yard"],
+    "Jalgaon": ["Jalgaon APMC", "Bhusawal Market Yard", "Amalner APMC", "Chopda Market Yard", "Pachora APMC", "Jamner Market Yard", "Raver APMC", "Yawal APMC", "Chalisgaon APMC", "Parola APMC"],
+    "Jalna": ["Jalna APMC", "Partur Market Yard", "Ambad APMC", "Bhokardan Market Yard", "Ghansawangi APMC"],
+    "Kolhapur": ["Kolhapur APMC (Shahupuri)", "Jaisingpur Market Yard", "Gadhinglaj APMC", "Ichalkaranji Market Yard", "Kagal APMC", "Panhala APMC", "Shirol APMC"],
+    "Latur": ["Latur APMC", "Udgir Market Yard", "Ahmedpur APMC", "Nilanga Market Yard", "Ausa APMC", "Chakur Market Yard"],
+    "Nagpur": ["Nagpur APMC (Kalamna)", "Kalmeshwar Market Yard", "Saoner APMC", "Katol Market Yard", "Narkhed APMC", "Umred Market Yard", "Ramtek APMC"],
+    "Nanded": ["Nanded APMC", "Loha Market Yard", "Hadgaon APMC", "Degloor Market Yard", "Bhokar Market Yard", "Mudkhed APMC", "Kinwat APMC"],
+    "Nandurbar": ["Nandurbar APMC", "Shahada Market Yard", "Taloda APMC", "Navapur Market Yard"],
+    "Nashik": ["Nashik APMC", "Lasalgaon APMC (Onion Market)", "Pimpalgaon Baswant APMC", "Yeola Market Yard", "Sinnar APMC", "Malegaon APMC", "Nandgaon Market Yard", "Chandwad APMC", "Kalwan Market Yard", "Satana APMC", "Dindori APMC", "Niphad Market Yard"],
+    "Osmanabad": ["Osmanabad APMC", "Tuljapur Market Yard", "Omerga APMC", "Kalamb Market Yard", "Bhum APMC", "Paranda Market Yard"],
+    "Parbhani": ["Parbhani APMC", "Gangakhed Market Yard", "Jintur APMC", "Palam Market Yard", "Sailu APMC"],
+    "Pune": ["Pune Gultekdi APMC", "Baramati APMC", "Indapur APMC", "Manchar Market Yard", "Junnar APMC", "Khed Market Yard", "Saswad APMC", "Shirur Market Yard", "Bhor APMC", "Talegaon APMC"],
+    "Ratnagiri": ["Ratnagiri APMC", "Chiplun Market Yard", "Khed APMC", "Lanja Market Yard", "Rajapur APMC"],
+    "Sangli": ["Sangli APMC (Turmeric Market)", "Tasgaon APMC (Raisin Market)", "Vita Market Yard", "Islampur APMC", "Jath Market Yard", "Khanapur APMC", "Palus Market Yard"],
+    "Satara": ["Satara APMC", "Karad APMC", "Phaltan Market Yard", "Wai APMC", "Koregaon Market Yard", "Khandala APMC", "Patan Market Yard"],
+    "Solapur": ["Solapur APMC", "Pandharpur Market Yard", "Barshi APMC", "Akkalkot Market Yard", "Sangola APMC", "Karmala Market Yard", "Mohol APMC", "Mangalwedha APMC"],
+    "Thane": ["Kalyan APMC", "Ulhasnagar Market Yard", "Murbad APMC", "Shahapur Market Yard"],
+    "Wardha": ["Wardha APMC", "Hinganghat Market Yard", "Arvi APMC", "Pulgaon Market Yard", "Deoli APMC"],
+    "Washim": ["Washim APMC", "Risod Market Yard", "Karanja APMC", "Malegaon Market Yard", "Mangrulpir APMC"],
+    "Yavatmal": ["Yavatmal APMC", "Pusad Market Yard", "Umarkhed APMC", "Wani Market Yard", "Digras APMC", "Darwha Market Yard", "Pandharkawada APMC"],
+
+    // ── Odisha ────────────────────────────────────────────────────────────────
+    "Cuttack": ["Cuttack APMC", "Athagarh Market Yard", "Banki APMC"],
+    "Khordha": ["Bhubaneswar APMC", "Jatni Market Yard", "Khordha APMC"],
+    "Sambalpur": ["Sambalpur APMC", "Kuchinda Market Yard", "Rairakhol APMC"],
+    "Bargarh": ["Bargarh APMC", "Attabira Market Yard", "Padampur APMC"],
+    "Balasore": ["Balasore APMC", "Jaleswar Market Yard", "Soro APMC"],
+    "Ganjam": ["Berhampur APMC", "Aska Market Yard", "Bhanjanagar APMC", "Hinjilicut Market Yard"],
+    "Kalahandi": ["Bhawanipatna APMC", "Kesinga Market Yard", "Junagarh APMC"],
+    "Koraput": ["Jeypore APMC", "Koraput Market Yard"],
+    "Mayurbhanj": ["Baripada APMC", "Rairangpur Market Yard", "Udala APMC"],
+    "Puri": ["Puri APMC", "Nimapada Market Yard", "Pipili APMC"],
+
+    // ── Punjab ────────────────────────────────────────────────────────────────
+    "Amritsar": ["Amritsar APMC", "Ajnala Market Yard", "Rayya APMC", "Majitha Market Yard", "Jandiala APMC"],
+    "Ludhiana": ["Ludhiana APMC (Ferozepur Road)", "Khanna APMC (Asia's Largest)", "Jagraon Market Yard", "Mullanpur APMC", "Samrala Market Yard", "Sahnewal APMC", "Raikot APMC"],
+    "Jalandhar": ["Jalandhar APMC", "Nakodar Market Yard", "Goraya APMC", "Shahkot Market Yard", "Phillaur APMC"],
+    "Patiala": ["Patiala APMC", "Nabha Market Yard", "Rajpura APMC", "Samana Market Yard", "Patran APMC"],
+    "Bathinda": ["Bathinda APMC", "Maur Market Yard", "Raman APMC", "Bhucho Market Yard", "Goniana APMC"],
+    "Sangrur": ["Sangrur APMC", "Sunam Market Yard", "Malerkotla APMC (Vegetable Market)", "Ahmedgarh Market Yard", "Dhuri APMC", "Lehra Gaga Market Yard"],
+    "Moga": ["Moga APMC", "Nihal Singh Wala Market Yard", "Baghapurana APMC", "Dharamkot Market Yard"],
+    "Ferozepur": ["Ferozepur Cantt APMC", "Zira Market Yard", "Guru Harsahai APMC", "Talwandi Bhai Market Yard"],
+    "Fazilka": ["Abohar APMC (Kinnow Market)", "Fazilka Market Yard", "Jalalabad APMC"],
+    "Hoshiarpur": ["Hoshiarpur APMC", "Dasuya Market Yard", "Garhshankar APMC", "Mukerian Market Yard", "Tanda Market Yard"],
+    "Gurdaspur": ["Gurdaspur APMC", "Batala Market Yard", "Dera Baba Nanak APMC", "Dhariwal Market Yard"],
+    "Barnala": ["Barnala APMC", "Tapa Market Yard", "Bhadaur APMC"],
+    "Kapurthala": ["Kapurthala APMC", "Phagwara Market Yard", "Sultanpur Lodhi APMC", "Bholath Market Yard"],
+    "Muktsar": ["Malout APMC", "Muktsar Market Yard", "Gidderbaha APMC"],
+    "Tarn Taran": ["Tarn Taran APMC", "Patti Market Yard", "Khadoor Sahib APMC"],
+
+    // ── Rajasthan ─────────────────────────────────────────────────────────────
+    "Jaipur": ["Jaipur APMC (Muhana Mandi)", "Chomu Market Yard", "Kotputli APMC", "Dudu Market Yard", "Phulera APMC", "Shahpura APMC", "Lalsot APMC"],
+    "Jodhpur": ["Jodhpur APMC (Bhagat Ki Kothi)", "Bilara Market Yard", "Piparcity APMC", "Phalodi APMC", "Osian Market Yard"],
+    "Kota": ["Kota APMC (Bhamashah Mandi)", "Ramganj Mandi APMC (Coriander Market)", "Sangod Market Yard", "Itawa APMC", "Pipalda Market Yard"],
+    "Bikaner": ["Bikaner APMC", "Sridungargarh Market Yard", "Nokha APMC", "Khajuwala Market Yard", "Lunkaransar APMC"],
+    "Sri Ganganagar": ["Sri Ganganagar APMC", "Padampur Market Yard", "Raisinghnagar APMC", "Garsana Market Yard", "Suratgarh APMC", "Sadulshahar APMC", "Karanpur APMC"],
+    "Hanumangarh": ["Hanumangarh Town APMC", "Hanumangarh Junction APMC", "Pilibangan Market Yard", "Rawatsar APMC", "Nohar Market Yard", "Bhadra APMC", "Sangaria APMC"],
+    "Alwar": ["Alwar APMC", "Khairthal APMC (Mustard Market)", "Bhiwadi Market Yard", "Ramgarh APMC", "Behror Market Yard", "Bansur APMC"],
+    "Bharatpur": ["Bharatpur APMC", "Deeg Market Yard", "Kumher APMC", "Nadbai Market Yard", "Weir APMC", "Bayana APMC"],
+    "Ajmer": ["Ajmer APMC", "Kekri APMC", "Bijainagar Market Yard", "Beawar APMC", "Kishangarh APMC (Grain Market)"],
+    "Nagaur": ["Nagaur APMC", "Merta City APMC", "Degana Market Yard", "Kuchaman City APMC", "Didwana Market Yard", "Ladnun APMC", "Parbatsar APMC"],
+    "Pali": ["Pali APMC", "Sumerpur APMC", "Soja APMC", "Jaitaran Market Yard", "Bali APMC"],
+    "Udaipur": ["Udaipur APMC", "Fatehnagar Market Yard", "Salumbar APMC", "Bhindar Market Yard"],
+    "Bhilwara": ["Bhilwara APMC", "Shahpura Market Yard", "Gulabpura APMC", "Asind Market Yard"],
+    "Chittorgarh": ["Chittorgarh APMC", "Nimbahera APMC", "Kapadwanj Market Yard", "Bari Sadri APMC", "Begun Market Yard"],
+    "Bundi": ["Bundi APMC", "Keshoraipatan Market Yard", "Hindoli APMC"],
+    "Baran": ["Baran APMC", "Anta Market Yard", "Chhabra APMC", "Atru Market Yard"],
+
+    // ── Tamil Nadu ────────────────────────────────────────────────────────────
+    "Chennai": ["Koyambedu APMC", "Madhavaram Market Yard"],
+    "Madurai": ["Madurai APMC (Mattuthavani)", "Thirumangalam Market Yard", "Melur APMC", "Usilampatti Market Yard"],
+    "Coimbatore": ["Coimbatore APMC", "Pollachi Market Yard", "Mettupalayam APMC (Potato/Vegetable Market)", "Tiruppur APMC"],
+    "Erode": ["Erode APMC (Turmeric Market)", "Gopichettipalayam Market Yard", "Perundurai APMC", "Bhavani Market Yard"],
+    "Salem": ["Salem APMC", "Attur Market Yard", "Mecheri APMC", "Omalur Market Yard", "Sankari APMC"],
+    "Tiruchirappalli": ["Trichy APMC (Gandhi Market)", "Manachanallur Market Yard", "Lalgudi APMC", "Thuraiyur Market Yard", "Musiri APMC"],
+    "Thanjavur": ["Thanjavur APMC", "Kumbakonam Market Yard", "Pattukkottai APMC", "Orathanadu Market Yard"],
+    "Vellore": ["Vellore APMC", "Gudiyatham Market Yard", "Ambur APMC", "Vaniyambadi Market Yard"],
+    "Dindigul": ["Dindigul APMC", "Ottanchatram Market Yard (Vegetable Market)", "Palani APMC", "Natham Market Yard"],
+    "Thoothukudi": ["Tuticorin APMC", "Kovilpatti Market Yard", "Ettayapuram APMC", "Tiruchendur Market Yard"],
+
+    // ── Telangana ─────────────────────────────────────────────────────────────
+    "Hyderabad": ["Bowenpally APMC", "Gudimalkapur Market Yard", "Mehdipatnam Market Yard"],
+    "Rangareddy": ["Vikarabad APMC", "Tandur APMC (Red Gram Market)", "Chevella Market Yard", "Ibrahimpatnam APMC"],
+    "Nizamabad": ["Nizamabad APMC (Turmeric/Grain Market)", "Armoor Market Yard", "Bodhan APMC", "Kamareddy Market Yard", "Banswada APMC"],
+    "Warangal (Urban)": ["Warangal APMC (Enumamula - Asia's 2nd Largest)", "Jangaon APMC", "Mahabubabad Market Yard", "Narsampet APMC", "Parkal Market Yard"],
+    "Karimnagar": ["Karimnagar APMC", "Jagtial APMC", "Sircilla Market Yard", "Huzurabad APMC", "Metpally Market Yard", "Peddapalli APMC", "Korutla Market Yard"],
+    "Khammam": ["Khammam APMC (Chili Market)", "Madhira Market Yard", "Wyra APMC", "Sathupally Market Yard", "Kothagudem APMC", "Bhadrachalam Market Yard"],
+    "Mahabubnagar": ["Mahabubnagar APMC", "Badepally APMC (Jadcherla)", "Nagarkurnool Market Yard", "Wanaparthy APMC", "Gadwal Market Yard", "Narayanpet APMC"],
+    "Nalgonda": ["Nalgonda APMC", "Miryalaguda APMC (Paddy Market)", "Suryapet Market Yard", "Devarakonda APMC", "Nakrekal Market Yard", "Bhongir APMC", "Alair Market Yard"],
+    "Medak": ["Medak APMC", "Sangareddy Market Yard", "Siddipet APMC", "Gajwel Market Yard", "Jogipet APMC", "Zaheerabad Market Yard"],
+    "Adilabad": ["Adilabad APMC (Cotton Market)", "Nirmal Market Yard", "Mancherial APMC", "Asifabad Market Yard", "Bhainsa APMC", "Luxettipet Market Yard"],
+
+    // ── Uttar Pradesh ─────────────────────────────────────────────────────────
+    "Agra": ["Agra APMC", "Achhnera Market Yard", "Fatehabad APMC", "Kiravali Market Yard", "Pinahat APMC"],
+    "Aligarh": ["Aligarh APMC", "Atrauli Market Yard", "Khair APMC", "Charra Market Yard"],
+    "Prayagraj": ["Allahabad APMC", "Sirsa Market Yard", "Bharwari APMC", "Jasra Market Yard"],
+    "Azamgarh": ["Azamgarh APMC", "Atrauliya Market Yard", "Lalganj APMC"],
+    "Bareilly": ["Bareilly APMC", "Aonla Market Yard", "Baheri APMC", "Nawabganj Market Yard"],
+    "Basti": ["Basti APMC", "Rudhauli Market Yard"],
+    "Bulandshahr": ["Bulandshahr APMC", "Khurja Market Yard", "Gulauthi APMC", "Siyana Market Yard", "Anupshahar APMC", "Jahangirabad Market Yard"],
+    "Deoria": ["Deoria APMC", "Salempur Market Yard", "Rudrapur APMC"],
+    "Etawah": ["Etawah APMC", "Bharthana Market Yard", "Jaswantnagar APMC"],
+    "Ayodhya": ["Ayodhya APMC", "Faizabad Market Yard", "Rudauli APMC"],
+    "Gautam Buddha Nagar": ["Noida APMC", "Dadri Market Yard", "Jewar APMC"],
+    "Ghaziabad": ["Ghaziabad APMC", "Hapur APMC (Grain Market)", "Loni Market Yard", "Muradnagar APMC"],
+    "Gorakhpur": ["Gorakhpur APMC", "Sahjanwa Market Yard", "Chauri Chaura APMC"],
+    "Hathras": ["Hathras APMC", "Sikandra Rao Market Yard", "Sadabad APMC"],
+    "Jhansi": ["Jhansi APMC", "Mauranipur Market Yard", "Moth APMC", "Baruasagar Market Yard"],
+    "Kanpur Nagar": ["Kanpur APMC (Chakeri)", "Naubasta Market Yard"],
+    "Kheri": ["Lakhimpur APMC", "Gola Gokarannath Market Yard", "Mohammadi APMC", "Tikonia Market Yard"],
+    "Lucknow": ["Lucknow APMC (Dubagga)", "Naveen Galla Mandi", "Bakshi Ka Talab Market Yard"],
+    "Mathura": ["Mathura APMC", "Kosi Kalan Market Yard", "Raya APMC"],
+    "Meerut": ["Meerut APMC", "Mawana Market Yard", "Sardhana APMC"],
+    "Mirzapur": ["Mirzapur APMC", "Ahraura Market Yard"],
+    "Moradabad": ["Moradabad APMC", "Sambhal Market Yard", "Chandausi APMC (Grain Market)", "Bahjoi Market Yard"],
+    "Muzaffarnagar": ["Muzaffarnagar APMC (Jaggery Market)", "Shamli APMC", "Kandhla Market Yard", "Khatauli APMC"],
+    "Raebareli": ["Raebareli APMC", "Lalganj Market Yard", "Bachhrawan APMC"],
+    "Saharanpur": ["Saharanpur APMC", "Gangoh Market Yard", "Nanauta APMC", "Deoband Market Yard", "Nakur APMC"],
+    "Shahjahanpur": ["Shahjahanpur APMC", "Puwayan Market Yard", "Tilhar APMC"],
+    "Sitapur": ["Sitapur APMC", "Sidhauli Market Yard", "Biswan APMC", "Laharpur Market Yard"],
+    "Sultanpur": ["Sultanpur APMC", "Amethi Market Yard", "Kadipur APMC"],
+    "Varanasi": ["Varanasi APMC", "Chandauli Market Yard", "Mughalsarai APMC"],
+
+    // ── West Bengal ───────────────────────────────────────────────────────────
+    "Kolkata": ["Kolkata APMC", "Sealdah Market Yard"],
+    "Purba Bardhaman": ["Burdwan APMC", "Memari Market Yard", "Kalna APMC", "Katwa Market Yard"],
+    "Hooghly": ["Sheoraphuly APMC", "Pandua Market Yard", "Tarkeshwar APMC", "Singur Market Yard"],
+    "Nadia": ["Krishnanagar APMC", "Ranaghat Market Yard", "Chakdaha APMC", "Bethuadahari Market Yard"],
+    "Murshidabad": ["Berhampore APMC", "Kandi Market Yard", "Jiaganj APMC", "Jangipur Market Yard"],
+    "North 24 Parganas": ["Barasat APMC", "Basirhat Market Yard", "Bongaon APMC", "Habra Market Yard"],
+    "South 24 Parganas": ["Baruipur APMC", "Diamond Harbour Market Yard", "Canning APMC"],
+    "Purba Medinipur": ["Tamluk APMC", "Haldia Market Yard", "Panskura Market Yard", "Egra APMC"],
+    "Paschim Medinipur": ["Midnapore APMC", "Kharagpur Market Yard", "Ghatal APMC", "Chandrakona Market Yard"],
+    "Bankura": ["Bankura APMC", "Bishnupur Market Yard", "Sonamukhi APMC"],
+    "Birbhum": ["Suri APMC", "Bolpur Market Yard", "Sainthia APMC", "Rampurhat Market Yard"],
+    "Malda": ["Malda APMC", "Chanchal Market Yard", "Samsi APMC"],
+    "Jalpaiguri": ["Jalpaiguri APMC", "Alipurduar Market Yard", "Dhupguri APMC"],
+    "Darjeeling": ["Siliguri APMC", "Darjeeling Market Yard", "Matigara APMC"],
+
+    // ── Delhi ─────────────────────────────────────────────────────────────────
+    "North Delhi": ["Azadpur APMC (Asia's Largest Fruit & Vegetable Market)", "Narela APMC (Grain Market)"],
+    "West Delhi": ["Keshopur APMC", "Najafgarh Market Yard"],
+    "South Delhi": ["Okhla APMC"],
+    "East Delhi": ["Ghazipur APMC (Flower/Fish/Fruit Market)"],
+
+    // ── Jammu and Kashmir ─────────────────────────────────────────────────────
+    "Srinagar": ["Parimpora APMC", "Srinagar Market Yard"],
+    "Jammu": ["Narwal APMC", "Jammu Market Yard"],
+    "Anantnag": ["Ashajipora Market Yard"],
+    "Baramulla": ["Sopore APMC (Apple Market)"]
+};
+
+/**
+ * For districts not in the curated list, generate sensible generic mandis.
+ */
+const getMandisFallback = (district) => [
+    `${district} APMC`,
+    `${district} Market Yard`,
+    `${district} Krishi Upaj Mandi`
+];
+
+/**
+ * Return mandi list for a district (curated first, fallback otherwise).
+ */
+const getMandisForDistrict = (district) =>
+    districtMandis[district] || getMandisFallback(district);
+
+module.exports = { indiaMandiStructure, getMandisForDistrict };
