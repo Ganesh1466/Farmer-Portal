@@ -144,6 +144,24 @@ const Profile = () => {
     const updateProfile = async (e) => {
         e.preventDefault();
 
+        // Mobile Number Validation
+        if (formData.phone && !/^\d{10}$/.test(formData.phone)) {
+            setMessage('Error: Phone number must be exactly 10 digits.');
+            return;
+        }
+
+        // Birthdate Validation (No future dates)
+        if (formData.dob) {
+            const selectedDate = new Date(formData.dob);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Reset time for accurate date comparison
+
+            if (selectedDate > today) {
+                setMessage('Error: Birthdate cannot be in the future.');
+                return;
+            }
+        }
+
         try {
             if (!user) throw new Error("No user logged in");
             setLoading(true);
@@ -247,7 +265,18 @@ const Profile = () => {
     };
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        
+        // Mobile number field processing: only digits and max 10 chars
+        if (name === 'phone') {
+            const digitsOnly = value.replace(/\D/g, '');
+            if (digitsOnly.length <= 10) {
+                setFormData({ ...formData, [name]: digitsOnly });
+            }
+            return;
+        }
+
+        setFormData({ ...formData, [name]: value });
     };
 
     const handleStateChange = (e) => {
@@ -460,6 +489,7 @@ const Profile = () => {
                                     name="dob"
                                     value={formData.dob}
                                     onChange={handleChange}
+                                    max={new Date().toISOString().split('T')[0]}
                                     className={`w-full border-2 ${theme.border} p-4 rounded-xl focus:${theme.ring} focus:ring-2 focus:outline-none transition-all duration-300 hover:shadow-lg bg-white`}
                                 />
                             </div>

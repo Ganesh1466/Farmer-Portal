@@ -7,6 +7,10 @@ export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
+    // ── COMMUNITY CHAT ADDITION ──────────────────────────────────────────────
+    const [profile, setProfile] = useState(null);
+    // ────────────────────────────────────────────────────────────────────────
+
     useEffect(() => {
         // Initialize Supabase Auth
         const initializeAuth = async () => {
@@ -19,6 +23,9 @@ export const AuthProvider = ({ children }) => {
                     handleLogout(); // Clean up if session is invalid
                 } else if (session?.user) {
                     await handleUserSession(session.user);
+                    // ── COMMUNITY CHAT ADDITION ──────────────────────────────
+                    await fetchCommunityProfile(session.user.id);
+                    // ────────────────────────────────────────────────────────
                 } else {
                     setLoading(false);
                 }
@@ -30,6 +37,9 @@ export const AuthProvider = ({ children }) => {
                     if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
                         if (session?.user) {
                             await handleUserSession(session.user);
+                            // ── COMMUNITY CHAT ADDITION ──────────────────────
+                            await fetchCommunityProfile(session.user.id);
+                            // ────────────────────────────────────────────────
                         }
                     } else if (event === 'SIGNED_OUT' || event === 'USER_DELETED') {
                         handleLogout();
@@ -169,6 +179,9 @@ export const AuthProvider = ({ children }) => {
 
     const handleLogout = () => {
         setUser(null);
+        // ── COMMUNITY CHAT ADDITION 
+        setProfile(null);
+
         localStorage.removeItem('user');
         setLoading(false);
     };
@@ -200,8 +213,118 @@ export const AuthProvider = ({ children }) => {
         return true;
     };
 
+    // ── COMMUNITY CHAT ADDITIONS ─────────────────────────────────────────────
+
+    // Fetches from the `users` table used by the community chat system
+    const fetchCommunityProfile = async (authId) => {
+        if (!authId) return;
+        try {
+            const { data, error } = await supabase
+                .from('users')
+                .select('*')
+                .eq('auth_id', authId)
+                .single();
+
+            if (data) {
+                setProfile(data);
+            } else if (error && (error.code === 'PGRST116' || error.status === 406)) {
+                // Community profile doesn't exist yet — create it from existing user/metadata
+                await createCommunityProfile(authId);
+            } else if (!data) {
+                // Unknown error or empty result — set a minimal fallback so the page
+                // doesn't hang on an infinite spinner. createCommunityProfile will be
+                // triggered on next load.
+                console.warn('Community profile not found, using fallback.');
+                await createCommunityProfile(authId);
+            }
+        } catch (err) {
+            console.error("Error fetching community profile:", err);
+            // Set a minimal fallback profile so the UI can still render
+            setProfile({ id: null, name: 'Farmer', profile_image: null, location: '' });
+        }
+    };
+
+    // Creates a row in the `users` table (community chat) if one doesn't exist
+    const createCommunityProfile = async (authId) => {
+        try {
+            const { data: authData } = await supabase.auth.getUser();
+            const authUser = authData?.user;
+            if (!authUser) return;
+
+            const name =
+                authUser.user_metadata?.full_name ||
+                authUser.user_metadata?.name ||
+                authUser.email?.split('@')[0] ||
+                'Farmer';
+
+            const newCommunityUser = {
+                auth_id: authId,
+                name,
+                location: authUser.user_metadata?.location || '',
+                profile_image: null,
+            };
+
+            const { data, error } = await supabase
+                .from('users')
+                .upsert(newCommunityUser, { onConflict: 'auth_id' })
+                .select()
+                .single();
+
+            if (error) {
+                console.error("Error creating community profile:", error);
+            } else if (data) {
+                setProfile(data);
+            }
+        } catch (err) {
+            console.error("Exception creating community profile:", err);
+        }
+    };
+
+    // Exposed sign-up used by the community chat AuthPage
+    const signUp = async ({ email, password, name, location }) => {
+        const { data, error } = await supabase.auth.signUp({ email, password });
+        if (error) throw error;
+        if (data.user) {
+            const { error: profileError } = await supabase.from('users').insert({
+                auth_id: data.user.id,
+                name,
+                location,
+                profile_image: null,
+            });
+            if (profileError) throw profileError;
+        }
+        return data;
+    };
+
+    // Exposed sign-in used by the community chat AuthPage
+    const signIn = async ({ email, password }) => {
+        const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        return data;
+    };
+
+    // signOut alias so community chat components can call signOut() directly
+    const signOut = async () => {
+        await logout();
+    };
+
+    // ─────────────────────────────────────────────────────────────────────────
+
     return (
-        <AuthContext.Provider value={{ user, login, logout, loading, checkProfileCompletion }}>
+        <AuthContext.Provider value={{
+            // ── original values ──────────────────────────────────────────────
+            user,
+            login,
+            logout,
+            loading,
+            checkProfileCompletion,
+            // ── community chat additions ─────────────────────────────────────
+            profile,          // row from `users` table (community chat)
+            signUp,           // email/password sign-up
+            signIn,           // email/password sign-in
+            signOut,          // alias for logout
+            fetchCommunityProfile,
+        }}>
             {!loading && children}
         </AuthContext.Provider>
     );
