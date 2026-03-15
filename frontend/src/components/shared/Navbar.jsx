@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
-import { User, LogOut, Bell, X } from 'lucide-react';
+import { User, LogOut, Bell, X, Menu } from 'lucide-react';
 import io from 'socket.io-client';
 import BuyerDetailsModal from './BuyerDetailsModal';
 import FarmerDetailsModal from './FarmerDetailsModal';
@@ -25,6 +25,7 @@ const Navbar = () => {
     const [selectedBuyerId, setSelectedBuyerId] = useState(null);
     const [showFarmerModal, setShowFarmerModal] = useState(false);
     const [selectedNotification, setSelectedNotification] = useState(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -177,7 +178,7 @@ const Navbar = () => {
                 </Link>
 
                 {/* Right Side: Navigation Links and Login/Profile */}
-                <div className="flex items-center space-x-6">
+                <div className="flex items-center space-x-2 md:space-x-6">
                     <div className="hidden md:flex space-x-8">
                         <Link to="/" className="text-lg font-medium text-gray-600 hover:text-green-600 border-b-2 border-transparent hover:border-green-600 transition-all duration-300 pb-1">Home</Link>
                         <Link to="/advisory" className="text-lg font-medium text-gray-600 hover:text-green-600 border-b-2 border-transparent hover:border-green-600 transition-all duration-300 pb-1">Advisory</Link>
@@ -368,8 +369,56 @@ const Navbar = () => {
                             </div>
                         </div>
                     )}
+                    {/* Hamburger Menu Button - Mobile Only */}
+                    <button
+                        className="md:hidden p-2 text-gray-600 hover:text-green-600 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+                    </button>
                 </div>
             </div>
+
+            {/* Mobile Menu Dropdown */}
+            {isMobileMenuOpen && (
+                <div className="md:hidden bg-white border-t border-gray-100 py-4 px-6 space-y-4 shadow-xl animate-fade-in-down">
+                    <Link
+                        to="/"
+                        className="block text-lg font-medium text-gray-600 hover:text-green-600 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Home
+                    </Link>
+                    <Link
+                        to="/advisory"
+                        className="block text-lg font-medium text-gray-600 hover:text-green-600 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Advisory
+                    </Link>
+                    <Link
+                        to="/weather"
+                        className="block text-lg font-medium text-gray-600 hover:text-green-600 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Weather
+                    </Link>
+                    <Link
+                        to="/mandi"
+                        className="block text-lg font-medium text-gray-600 hover:text-green-600 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Mandi
+                    </Link>
+                    <Link
+                        to="/community"
+                        className="block text-lg font-medium text-gray-600 hover:text-green-600 transition-colors"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        Community
+                    </Link>
+                </div>
+            )}
         </nav>
     );
 };
