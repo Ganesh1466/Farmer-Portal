@@ -236,7 +236,7 @@ const SellCrop = () => {
     };
 
     const handleDelete = async (id) => {
-        if (!confirm('Are you sure you want to delete this listing?')) return;
+        if (!confirm("Deleting this crop will also remove all contracts and notifications. Continue?")) return;
 
         try {
             setLoading(true);
@@ -247,17 +247,17 @@ const SellCrop = () => {
                 .eq('id', id);
 
             if (error) throw error;
+
             setMessage('Listing deleted successfully!');
             fetchListings();
-            setTimeout(() => setMessage(''), 3000);
+
         } catch (error) {
-            console.error('Error deleting listing:', error);
-            setMessage(`Error: ${error.message}`);
+            console.error(error);
+            setMessage(error.message);
         } finally {
             setLoading(false);
         }
     };
-
     const resetForm = () => {
         setFormData({
             crop_name: '',
